@@ -11,7 +11,7 @@ function RootComponent() {
   const { user } = useUserStore();
 
   return (
-    <>
+    <div className="h-[100vh] max-h-[100vh]">
       <div className="p-2 flex gap-2 text-lg">
         <Link
           to="/"
@@ -31,18 +31,20 @@ function RootComponent() {
           About
         </Link>
         <Link
-          to="/excercises"
+          to="/exercises"
           activeProps={{
             className: "font-bold",
           }}
         >
-          Excercises
+          Exercises
         </Link>
         {user !== undefined ? <div>{user.name}</div> : <div>Log in</div>}
       </div>
-      <Outlet />
+      <div className="p-2">
+        <Outlet />
+      </div>
       <TanStackRouterDevtools position="bottom-right" />
       <Toaster />
-    </>
+    </div>
   );
 }
