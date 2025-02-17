@@ -1,8 +1,14 @@
 import { memo } from "react";
+import { cn } from "../utils/cn";
 
 interface KeyboardProps {
   clickLetterBtn: React.MouseEventHandler;
   clickDeleteBtn: React.MouseEventHandler;
+}
+
+interface KeyProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+  value: string;
+  keyType?: "normal" | "delete";
 }
 
 const consArr = [
@@ -46,6 +52,20 @@ const vowelArr = [
   "ː",
 ];
 
+function Key({ value, keyType, ...props }: Readonly<KeyProps>) {
+  return (
+    <button
+      {...props}
+      className={cn(
+        "p-1 rounded shadow",
+        keyType === "delete" ? "bg-red-300" : "bg-green-200"
+      )}
+    >
+      {value}
+    </button>
+  );
+}
+
 export default memo(function Keyboard({
   clickLetterBtn,
   clickDeleteBtn,
@@ -54,18 +74,14 @@ export default memo(function Keyboard({
     <div>
       <div>
         {vowelArr.map((sign) => (
-          <button onClick={clickLetterBtn} key={sign}>
-            {sign}
-          </button>
+          <Key key={sign} value={sign} onClick={clickLetterBtn} />
         ))}
       </div>
       <div>
         {consArr.map((sign) => (
-          <button onClick={clickLetterBtn} key={sign}>
-            {sign}
-          </button>
+          <Key key={sign} value={sign} onClick={clickLetterBtn} />
         ))}
-        <button onClick={clickDeleteBtn}>Delete</button>
+        <Key value={"Delete"} keyType="delete" onClick={clickDeleteBtn} />
       </div>
     </div>
   );
