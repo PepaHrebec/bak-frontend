@@ -1,16 +1,12 @@
-import { create } from "zustand";
+// import { create } from "zustand";
+// import { UserProfile } from "./types";
 
-interface User {
-  name: string;
-  id: string;
-}
+// type UserStore = {
+//   user: UserProfile | undefined;
+//   setUser: (user: UserProfile | undefined) => void;
+// };
 
-type UserStore = {
-  user: User | undefined;
-  //   inc: () => void;
-};
-
-export const useUserStore = create<UserStore>()((set) => ({
-  user: undefined,
-  //   inc: () => set((state) => ({ count: state.count + 1 })),
-}));
+// export const useUserStore = create<UserStore>()((set) => ({
+//   user: undefined,
+//   setUser: (user) => set({ user: user }),
+// }));
