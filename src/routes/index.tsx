@@ -1,16 +1,24 @@
 import { useEffect, useState } from "react";
 import { createFileRoute } from "@tanstack/react-router";
-import { load } from "../main";
 import { useQuery } from "@tanstack/react-query";
 import Keyboard from "../components/keyboard";
 import toast from "react-hot-toast";
 import { cn } from "../utils/cn";
+import { handleExpiredCookie, load } from "../utils/functions";
+import { fetcher } from "../utils/axios";
+import { useLocalStorage } from "usehooks-ts";
+import { UserProfile } from "../utils/types";
 
 export const Route = createFileRoute("/")({
   component: HomeComponent,
 });
 
 function HomeComponent() {
+  const [userData, setValue] = useLocalStorage<undefined | UserProfile>(
+    "user",
+    undefined
+  );
+
   const { isPending, error, data, isFetching, refetch } = useQuery({
     queryKey: ["repoData"],
     queryFn: () => load(),
@@ -22,6 +30,7 @@ function HomeComponent() {
   useEffect(() => {
     setUserWord("");
     setRevealTranscription(false);
+    handleExpiredCookie(data, setValue, userData);
   }, [data]);
 
   const isLoading = isPending || isFetching;
@@ -57,6 +66,16 @@ function HomeComponent() {
     }
   }
 
+  async function saveWord() {
+    try {
+      await fetcher.post("/repeat-list", {
+        word: data?.originalWord,
+      });
+    } catch (error: any) {
+      toast.error(error.response.data.mess);
+    }
+  }
+
   return (
     <div className="flex flex-col">
       {isLoading ? (
@@ -68,11 +87,12 @@ function HomeComponent() {
           </h3>
           <h2>{userWord}</h2>
           <div>{data.transcriptions[0]}</div>
-          <button onClick={() => refetch}>Refetch</button>
+          <button onClick={() => refetch()}>Refetch</button>
           <button onClick={check}>Check</button>
           <button onClick={() => setRevealTranscription((prev) => !prev)}>
             Reveal
           </button>
+          {userData ? <button onClick={saveWord}>Save</button> : null}
         </div>
       )}
 

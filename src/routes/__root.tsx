@@ -1,14 +1,19 @@
 import { Link, Outlet, createRootRoute } from "@tanstack/react-router";
 import { TanStackRouterDevtools } from "@tanstack/router-devtools";
 import { Toaster } from "react-hot-toast";
-import { useUserStore } from "../utils/store";
+import { logOut } from "../utils/functions";
+import { useLocalStorage } from "usehooks-ts";
+import { UserProfile } from "../utils/types";
 
 export const Route = createRootRoute({
   component: RootComponent,
 });
 
 function RootComponent() {
-  const { user } = useUserStore();
+  const [value, setValue] = useLocalStorage<undefined | UserProfile>(
+    "user",
+    undefined
+  );
 
   return (
     <div className="h-[100vh] max-h-[100vh]">
@@ -38,7 +43,31 @@ function RootComponent() {
         >
           Exercises
         </Link>
-        {user !== undefined ? <div>{user.name}</div> : <div>Log in</div>}
+        {value !== undefined ? (
+          <div>
+            <div>{value.name}</div>
+            <button onClick={() => logOut(setValue)}>Log-out</button>
+          </div>
+        ) : (
+          <div>
+            <Link
+              to="/sign-in"
+              activeProps={{
+                className: "font-bold",
+              }}
+            >
+              Sign-in
+            </Link>
+            <Link
+              to="/log-in"
+              activeProps={{
+                className: "font-bold",
+              }}
+            >
+              Log-in
+            </Link>
+          </div>
+        )}
       </div>
       <div className="p-2">
         <Outlet />
