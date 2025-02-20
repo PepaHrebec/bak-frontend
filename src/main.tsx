@@ -30,14 +30,6 @@ declare module "@tanstack/react-router" {
   }
 }
 
-export async function load(): Promise<{
-  originalWord: string;
-  transcriptions: string[];
-}> {
-  const f = await fetch("http://localhost:3000/");
-  return await f.json();
-}
-
 const rootElement = document.getElementById("app")!;
 
 if (!rootElement.innerHTML) {

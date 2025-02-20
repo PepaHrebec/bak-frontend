@@ -11,11 +11,26 @@
 // Import Routes
 
 import { Route as rootRoute } from './routes/__root'
+import { Route as SignInImport } from './routes/sign-in'
+import { Route as LogInImport } from './routes/log-in'
 import { Route as AboutImport } from './routes/about'
 import { Route as IndexImport } from './routes/index'
 import { Route as ExercisesIndexImport } from './routes/exercises/index'
+import { Route as ExercisesInvertedImport } from './routes/exercises/inverted'
 
 // Create/Update Routes
+
+const SignInRoute = SignInImport.update({
+  id: '/sign-in',
+  path: '/sign-in',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const LogInRoute = LogInImport.update({
+  id: '/log-in',
+  path: '/log-in',
+  getParentRoute: () => rootRoute,
+} as any)
 
 const AboutRoute = AboutImport.update({
   id: '/about',
@@ -32,6 +47,12 @@ const IndexRoute = IndexImport.update({
 const ExercisesIndexRoute = ExercisesIndexImport.update({
   id: '/exercises/',
   path: '/exercises/',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const ExercisesInvertedRoute = ExercisesInvertedImport.update({
+  id: '/exercises/inverted',
+  path: '/exercises/inverted',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -53,6 +74,27 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AboutImport
       parentRoute: typeof rootRoute
     }
+    '/log-in': {
+      id: '/log-in'
+      path: '/log-in'
+      fullPath: '/log-in'
+      preLoaderRoute: typeof LogInImport
+      parentRoute: typeof rootRoute
+    }
+    '/sign-in': {
+      id: '/sign-in'
+      path: '/sign-in'
+      fullPath: '/sign-in'
+      preLoaderRoute: typeof SignInImport
+      parentRoute: typeof rootRoute
+    }
+    '/exercises/inverted': {
+      id: '/exercises/inverted'
+      path: '/exercises/inverted'
+      fullPath: '/exercises/inverted'
+      preLoaderRoute: typeof ExercisesInvertedImport
+      parentRoute: typeof rootRoute
+    }
     '/exercises/': {
       id: '/exercises/'
       path: '/exercises'
@@ -68,12 +110,18 @@ declare module '@tanstack/react-router' {
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
+  '/log-in': typeof LogInRoute
+  '/sign-in': typeof SignInRoute
+  '/exercises/inverted': typeof ExercisesInvertedRoute
   '/exercises': typeof ExercisesIndexRoute
 }
 
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
+  '/log-in': typeof LogInRoute
+  '/sign-in': typeof SignInRoute
+  '/exercises/inverted': typeof ExercisesInvertedRoute
   '/exercises': typeof ExercisesIndexRoute
 }
 
@@ -81,27 +129,55 @@ export interface FileRoutesById {
   __root__: typeof rootRoute
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
+  '/log-in': typeof LogInRoute
+  '/sign-in': typeof SignInRoute
+  '/exercises/inverted': typeof ExercisesInvertedRoute
   '/exercises/': typeof ExercisesIndexRoute
 }
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/about' | '/exercises'
+  fullPaths:
+    | '/'
+    | '/about'
+    | '/log-in'
+    | '/sign-in'
+    | '/exercises/inverted'
+    | '/exercises'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/about' | '/exercises'
-  id: '__root__' | '/' | '/about' | '/exercises/'
+  to:
+    | '/'
+    | '/about'
+    | '/log-in'
+    | '/sign-in'
+    | '/exercises/inverted'
+    | '/exercises'
+  id:
+    | '__root__'
+    | '/'
+    | '/about'
+    | '/log-in'
+    | '/sign-in'
+    | '/exercises/inverted'
+    | '/exercises/'
   fileRoutesById: FileRoutesById
 }
 
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AboutRoute: typeof AboutRoute
+  LogInRoute: typeof LogInRoute
+  SignInRoute: typeof SignInRoute
+  ExercisesInvertedRoute: typeof ExercisesInvertedRoute
   ExercisesIndexRoute: typeof ExercisesIndexRoute
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AboutRoute: AboutRoute,
+  LogInRoute: LogInRoute,
+  SignInRoute: SignInRoute,
+  ExercisesInvertedRoute: ExercisesInvertedRoute,
   ExercisesIndexRoute: ExercisesIndexRoute,
 }
 
@@ -117,6 +193,9 @@ export const routeTree = rootRoute
       "children": [
         "/",
         "/about",
+        "/log-in",
+        "/sign-in",
+        "/exercises/inverted",
         "/exercises/"
       ]
     },
@@ -125,6 +204,15 @@ export const routeTree = rootRoute
     },
     "/about": {
       "filePath": "about.tsx"
+    },
+    "/log-in": {
+      "filePath": "log-in.tsx"
+    },
+    "/sign-in": {
+      "filePath": "sign-in.tsx"
+    },
+    "/exercises/inverted": {
+      "filePath": "exercises/inverted.tsx"
     },
     "/exercises/": {
       "filePath": "exercises/index.tsx"
