@@ -2,20 +2,15 @@ import { useMutation } from "@tanstack/react-query";
 import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
 import { fetcher } from "../utils/axios";
-import { UserProfile } from "../utils/types";
+import { UserAuthValues, UserProfile } from "../utils/types";
 import { useLocalStorage } from "usehooks-ts";
-
-interface UserAuthValues {
-  name: string;
-  password: string;
-}
 
 export const Route = createFileRoute("/log-in")({
   component: RouteComponent,
 });
 
 function RouteComponent() {
-  const [, setValue] = useLocalStorage<undefined | UserProfile>(
+  const [userData, setValue] = useLocalStorage<undefined | UserProfile>(
     "user",
     undefined
   );
@@ -40,6 +35,7 @@ function RouteComponent() {
     const rtrn = await data.data;
 
     setValue({ name: rtrn.name, id: rtrn.id });
+    console.log(userData);
   }
 
   return (

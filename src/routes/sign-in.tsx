@@ -2,13 +2,8 @@ import { useMutation } from "@tanstack/react-query";
 import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
 import { fetcher } from "../utils/axios";
-import { UserProfile } from "../utils/types";
+import { UserAuthValues, UserProfile } from "../utils/types";
 import { useLocalStorage } from "usehooks-ts";
-
-interface UserAuthValues {
-  name: string;
-  password: string;
-}
 
 export const Route = createFileRoute("/sign-in")({
   component: RouteComponent,
