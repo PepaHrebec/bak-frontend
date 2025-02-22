@@ -13,3 +13,8 @@ export interface TranscriptionRequest extends BasicRequest {
   wordIsInList: boolean;
   loggedIn: boolean;
 }
+
+export interface UserAuthValues {
+  name: string;
+  password: string;
+}
