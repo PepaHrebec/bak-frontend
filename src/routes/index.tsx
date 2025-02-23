@@ -11,6 +11,7 @@ import { UserProfile } from "../utils/types";
 import { Send, NotebookPen, Search, BookmarkPlus } from "lucide-react";
 import { Button } from "../components/buttons/Button";
 import { UserWordDisplay } from "../components/UserWordDisplay";
+import { DoubleBorder } from "../components/DoubleBorder";
 
 export const Route = createFileRoute("/")({
   component: HomeComponent,
@@ -100,25 +101,23 @@ function HomeComponent() {
     <div className="h-full flex flex-col justify-center">
       <div className="flex flex-col gap-16">
         <div className="flex flex-col gap-4 items-center">
-          <div className="border-6 rounded-2xl border-white shadow">
-            <div className="flex flex-row justify-around min-w-[40vw] bg-white p-4 rounded-lg m-2 shadow text-2xl gap-6">
-              {isPending || isFetching ? (
-                <p className="text-gray-400">Loading...</p>
-              ) : (
-                <>
-                  <p>{data.originalWord.toLocaleUpperCase()}</p>
-                  <p
-                    className={cn(
-                      "transition duration-500",
-                      revealedTranscription ? "blur-none" : "blur"
-                    )}
-                  >
-                    {data.transcriptions[0]}
-                  </p>
-                </>
-              )}
-            </div>
-          </div>
+          <DoubleBorder className="min-w-[40vw]">
+            {isPending || isFetching ? (
+              <p className="text-gray-400">Loading...</p>
+            ) : (
+              <>
+                <p>{data.originalWord.toLocaleUpperCase()}</p>
+                <p
+                  className={cn(
+                    "transition duration-500",
+                    revealedTranscription ? "blur-none" : "blur"
+                  )}
+                >
+                  {data.transcriptions[0]}
+                </p>
+              </>
+            )}
+          </DoubleBorder>
           <UserWordDisplay userWord={userWord} />
         </div>
         <div className="flex flex-col items-center gap-4">
