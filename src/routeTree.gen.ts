@@ -13,7 +13,7 @@
 import { Route as rootRoute } from './routes/__root'
 import { Route as SignInImport } from './routes/sign-in'
 import { Route as LogInImport } from './routes/log-in'
-import { Route as AboutImport } from './routes/about'
+import { Route as InvertedImport } from './routes/inverted'
 import { Route as IndexImport } from './routes/index'
 import { Route as ExercisesIndexImport } from './routes/exercises/index'
 import { Route as ExercisesInvertedImport } from './routes/exercises/inverted'
@@ -32,9 +32,9 @@ const LogInRoute = LogInImport.update({
   getParentRoute: () => rootRoute,
 } as any)
 
-const AboutRoute = AboutImport.update({
-  id: '/about',
-  path: '/about',
+const InvertedRoute = InvertedImport.update({
+  id: '/inverted',
+  path: '/inverted',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -67,11 +67,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexImport
       parentRoute: typeof rootRoute
     }
-    '/about': {
-      id: '/about'
-      path: '/about'
-      fullPath: '/about'
-      preLoaderRoute: typeof AboutImport
+    '/inverted': {
+      id: '/inverted'
+      path: '/inverted'
+      fullPath: '/inverted'
+      preLoaderRoute: typeof InvertedImport
       parentRoute: typeof rootRoute
     }
     '/log-in': {
@@ -109,7 +109,7 @@ declare module '@tanstack/react-router' {
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/about': typeof AboutRoute
+  '/inverted': typeof InvertedRoute
   '/log-in': typeof LogInRoute
   '/sign-in': typeof SignInRoute
   '/exercises/inverted': typeof ExercisesInvertedRoute
@@ -118,7 +118,7 @@ export interface FileRoutesByFullPath {
 
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/about': typeof AboutRoute
+  '/inverted': typeof InvertedRoute
   '/log-in': typeof LogInRoute
   '/sign-in': typeof SignInRoute
   '/exercises/inverted': typeof ExercisesInvertedRoute
@@ -128,7 +128,7 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRoute
   '/': typeof IndexRoute
-  '/about': typeof AboutRoute
+  '/inverted': typeof InvertedRoute
   '/log-in': typeof LogInRoute
   '/sign-in': typeof SignInRoute
   '/exercises/inverted': typeof ExercisesInvertedRoute
@@ -139,7 +139,7 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
-    | '/about'
+    | '/inverted'
     | '/log-in'
     | '/sign-in'
     | '/exercises/inverted'
@@ -147,7 +147,7 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
-    | '/about'
+    | '/inverted'
     | '/log-in'
     | '/sign-in'
     | '/exercises/inverted'
@@ -155,7 +155,7 @@ export interface FileRouteTypes {
   id:
     | '__root__'
     | '/'
-    | '/about'
+    | '/inverted'
     | '/log-in'
     | '/sign-in'
     | '/exercises/inverted'
@@ -165,7 +165,7 @@ export interface FileRouteTypes {
 
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
-  AboutRoute: typeof AboutRoute
+  InvertedRoute: typeof InvertedRoute
   LogInRoute: typeof LogInRoute
   SignInRoute: typeof SignInRoute
   ExercisesInvertedRoute: typeof ExercisesInvertedRoute
@@ -174,7 +174,7 @@ export interface RootRouteChildren {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
-  AboutRoute: AboutRoute,
+  InvertedRoute: InvertedRoute,
   LogInRoute: LogInRoute,
   SignInRoute: SignInRoute,
   ExercisesInvertedRoute: ExercisesInvertedRoute,
@@ -192,7 +192,7 @@ export const routeTree = rootRoute
       "filePath": "__root.tsx",
       "children": [
         "/",
-        "/about",
+        "/inverted",
         "/log-in",
         "/sign-in",
         "/exercises/inverted",
@@ -202,8 +202,8 @@ export const routeTree = rootRoute
     "/": {
       "filePath": "index.tsx"
     },
-    "/about": {
-      "filePath": "about.tsx"
+    "/inverted": {
+      "filePath": "inverted.tsx"
     },
     "/log-in": {
       "filePath": "log-in.tsx"

@@ -24,7 +24,7 @@ function RootComponent() {
           <nav className="flex justify-between text-lg md:text-xl md:w-[80vw]">
             <div className="flex flex-row">
               <NavLink to="/" text="Home" />
-              <NavLink to="/about" text="About" />
+              <NavLink to="/inverted" text="Inverted" />
               <NavLink to="/exercises" text="Exercises" />
             </div>
             <div className="flex flex-row gap-4">
