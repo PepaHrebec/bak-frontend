@@ -19,7 +19,7 @@ export const Button = ({
       {...props}
       disabled={disabled}
       className={cn(
-        "rounded-none font-bold text-white bg-green-500 px-3 py-1 hover:rounded-md hover:bg-green-600 active:bg-green-700 transition-all duration-200 hover:cursor-pointer flex flex-row items-center gap-2 min-w-[6rem]",
+        "font-bold text-white bg-green-500 px-3 py-1 rounded-sm hover:rounded-md hover:bg-green-600 active:bg-green-700 transition-all duration-200 hover:cursor-pointer flex flex-row items-center gap-2 min-w-[6rem]",
         buttonType === "warning"
           ? "bg-amber-400 hover:bg-amber-500 active:bg-amber-600"
           : "",
@@ -31,7 +31,7 @@ export const Button = ({
           : "",
         className,
         disabled
-          ? "bg-gray-300 text-gray-500 hover:rounded-none hover:bg-gray-300 hover:cursor-default"
+          ? "bg-gray-300 text-gray-500 hover:rounded-none hover:bg-gray-300 active:bg-gray-300 hover:cursor-default"
           : ""
       )}
     >

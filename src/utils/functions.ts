@@ -16,6 +16,7 @@ export function handleExpiredCookie(
 ) {
   if (data && !data.loggedIn && user) {
     console.log("HIT");
+    console.log(data, data.loggedIn, user);
     setValue(undefined);
   }
 }

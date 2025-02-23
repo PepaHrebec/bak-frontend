@@ -21,7 +21,7 @@ function RootComponent() {
     <div className="h-[100vh] max-h-[100vh] bg-gray-100 flex flex-col items-center">
       <div className=" h-full flex flex-col">
         <div className="border-b-4 border-b-white w-[100vw] flex flex-row justify-center">
-          <nav className="flex justify-between text-xl w-[80vw]">
+          <nav className="flex justify-between text-lg md:text-xl md:w-[80vw]">
             <div className="flex flex-row">
               <NavLink to="/" text="Home" />
               <NavLink to="/about" text="About" />
