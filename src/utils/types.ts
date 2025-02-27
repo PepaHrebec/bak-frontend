@@ -14,6 +14,12 @@ export interface TranscriptionRequest extends BasicRequest {
   loggedIn: boolean;
 }
 
+export interface UserListRequest extends BasicRequest {
+  id: number;
+  word: string;
+  transcription: string;
+}
+
 export interface UserAuthValues {
   name: string;
   password: string;
