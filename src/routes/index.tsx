@@ -4,8 +4,11 @@ import { useQuery } from "@tanstack/react-query";
 import Keyboard from "../components/keyboard";
 import toast from "react-hot-toast";
 import { cn } from "../utils/cn";
-import { handleExpiredCookie, load } from "../utils/functions";
-import { fetcher } from "../utils/axios";
+import {
+  handleExpiredCookie,
+  loadTranscription,
+  saveWord,
+} from "../utils/functions";
 import { useLocalStorage } from "usehooks-ts";
 import { UserProfile } from "../utils/types";
 import { Send, NotebookPen, Search, BookmarkPlus } from "lucide-react";
@@ -27,13 +30,14 @@ function HomeComponent() {
   // Data loading
   const { isPending, error, data, isFetching, refetch } = useQuery({
     queryKey: ["repoData"],
-    queryFn: () => load(),
+    queryFn: () => loadTranscription(),
   });
 
   // State hooks
   const [userWord, setUserWord] = useState("");
   const [revealedTranscription, setRevealedTranscription] = useState(false);
   const [hasShownSolution, setHasShownSolution] = useState(false);
+  const [isSaved, setIsSaved] = useState(false);
 
   // UseEffects
   useEffect(() => {
@@ -75,16 +79,6 @@ function HomeComponent() {
       toast("Almost there!");
     } else {
       toast.error("You've made an error.");
-    }
-  }
-
-  async function saveWord() {
-    try {
-      await fetcher.post("/repeat-list", {
-        word: data?.originalWord,
-      });
-    } catch (error: any) {
-      toast.error(error.response.data.mess);
     }
   }
 
@@ -141,7 +135,18 @@ function HomeComponent() {
               {revealedTranscription ? "Hide" : "Show"}
             </Button>
             {userData ? (
-              <Button LucideIcon={BookmarkPlus} onClick={saveWord}>
+              <Button
+                LucideIcon={BookmarkPlus}
+                disabled={data?.wordIsInList || isSaved}
+                onClick={
+                  isPending || isFetching
+                    ? () => null
+                    : () => {
+                        saveWord(data?.originalWord, data?.transcriptions[0]);
+                        setIsSaved(true);
+                      }
+                }
+              >
                 Save To List
               </Button>
             ) : null}

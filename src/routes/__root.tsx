@@ -25,7 +25,7 @@ function RootComponent() {
             <div className="flex flex-row">
               <NavLink to="/" text="Home" />
               <NavLink to="/inverted" text="Inverted" />
-              <NavLink to="/exercises" text="Exercises" />
+              {value !== undefined ? <NavLink to="/list" text="List" /> : null}
             </div>
             <div className="flex flex-row gap-4">
               {value === undefined ? (

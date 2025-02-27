@@ -15,8 +15,9 @@ import { Route as SignInImport } from './routes/sign-in'
 import { Route as LogInImport } from './routes/log-in'
 import { Route as InvertedImport } from './routes/inverted'
 import { Route as IndexImport } from './routes/index'
-import { Route as ExercisesIndexImport } from './routes/exercises/index'
-import { Route as ExercisesInvertedImport } from './routes/exercises/inverted'
+import { Route as ListIndexImport } from './routes/list/index'
+import { Route as ListRegularImport } from './routes/list/regular'
+import { Route as ListInvertedImport } from './routes/list/inverted'
 
 // Create/Update Routes
 
@@ -44,15 +45,21 @@ const IndexRoute = IndexImport.update({
   getParentRoute: () => rootRoute,
 } as any)
 
-const ExercisesIndexRoute = ExercisesIndexImport.update({
-  id: '/exercises/',
-  path: '/exercises/',
+const ListIndexRoute = ListIndexImport.update({
+  id: '/list/',
+  path: '/list/',
   getParentRoute: () => rootRoute,
 } as any)
 
-const ExercisesInvertedRoute = ExercisesInvertedImport.update({
-  id: '/exercises/inverted',
-  path: '/exercises/inverted',
+const ListRegularRoute = ListRegularImport.update({
+  id: '/list/regular',
+  path: '/list/regular',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const ListInvertedRoute = ListInvertedImport.update({
+  id: '/list/inverted',
+  path: '/list/inverted',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -88,18 +95,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SignInImport
       parentRoute: typeof rootRoute
     }
-    '/exercises/inverted': {
-      id: '/exercises/inverted'
-      path: '/exercises/inverted'
-      fullPath: '/exercises/inverted'
-      preLoaderRoute: typeof ExercisesInvertedImport
+    '/list/inverted': {
+      id: '/list/inverted'
+      path: '/list/inverted'
+      fullPath: '/list/inverted'
+      preLoaderRoute: typeof ListInvertedImport
       parentRoute: typeof rootRoute
     }
-    '/exercises/': {
-      id: '/exercises/'
-      path: '/exercises'
-      fullPath: '/exercises'
-      preLoaderRoute: typeof ExercisesIndexImport
+    '/list/regular': {
+      id: '/list/regular'
+      path: '/list/regular'
+      fullPath: '/list/regular'
+      preLoaderRoute: typeof ListRegularImport
+      parentRoute: typeof rootRoute
+    }
+    '/list/': {
+      id: '/list/'
+      path: '/list'
+      fullPath: '/list'
+      preLoaderRoute: typeof ListIndexImport
       parentRoute: typeof rootRoute
     }
   }
@@ -112,8 +126,9 @@ export interface FileRoutesByFullPath {
   '/inverted': typeof InvertedRoute
   '/log-in': typeof LogInRoute
   '/sign-in': typeof SignInRoute
-  '/exercises/inverted': typeof ExercisesInvertedRoute
-  '/exercises': typeof ExercisesIndexRoute
+  '/list/inverted': typeof ListInvertedRoute
+  '/list/regular': typeof ListRegularRoute
+  '/list': typeof ListIndexRoute
 }
 
 export interface FileRoutesByTo {
@@ -121,8 +136,9 @@ export interface FileRoutesByTo {
   '/inverted': typeof InvertedRoute
   '/log-in': typeof LogInRoute
   '/sign-in': typeof SignInRoute
-  '/exercises/inverted': typeof ExercisesInvertedRoute
-  '/exercises': typeof ExercisesIndexRoute
+  '/list/inverted': typeof ListInvertedRoute
+  '/list/regular': typeof ListRegularRoute
+  '/list': typeof ListIndexRoute
 }
 
 export interface FileRoutesById {
@@ -131,8 +147,9 @@ export interface FileRoutesById {
   '/inverted': typeof InvertedRoute
   '/log-in': typeof LogInRoute
   '/sign-in': typeof SignInRoute
-  '/exercises/inverted': typeof ExercisesInvertedRoute
-  '/exercises/': typeof ExercisesIndexRoute
+  '/list/inverted': typeof ListInvertedRoute
+  '/list/regular': typeof ListRegularRoute
+  '/list/': typeof ListIndexRoute
 }
 
 export interface FileRouteTypes {
@@ -142,24 +159,27 @@ export interface FileRouteTypes {
     | '/inverted'
     | '/log-in'
     | '/sign-in'
-    | '/exercises/inverted'
-    | '/exercises'
+    | '/list/inverted'
+    | '/list/regular'
+    | '/list'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/inverted'
     | '/log-in'
     | '/sign-in'
-    | '/exercises/inverted'
-    | '/exercises'
+    | '/list/inverted'
+    | '/list/regular'
+    | '/list'
   id:
     | '__root__'
     | '/'
     | '/inverted'
     | '/log-in'
     | '/sign-in'
-    | '/exercises/inverted'
-    | '/exercises/'
+    | '/list/inverted'
+    | '/list/regular'
+    | '/list/'
   fileRoutesById: FileRoutesById
 }
 
@@ -168,8 +188,9 @@ export interface RootRouteChildren {
   InvertedRoute: typeof InvertedRoute
   LogInRoute: typeof LogInRoute
   SignInRoute: typeof SignInRoute
-  ExercisesInvertedRoute: typeof ExercisesInvertedRoute
-  ExercisesIndexRoute: typeof ExercisesIndexRoute
+  ListInvertedRoute: typeof ListInvertedRoute
+  ListRegularRoute: typeof ListRegularRoute
+  ListIndexRoute: typeof ListIndexRoute
 }
 
 const rootRouteChildren: RootRouteChildren = {
@@ -177,8 +198,9 @@ const rootRouteChildren: RootRouteChildren = {
   InvertedRoute: InvertedRoute,
   LogInRoute: LogInRoute,
   SignInRoute: SignInRoute,
-  ExercisesInvertedRoute: ExercisesInvertedRoute,
-  ExercisesIndexRoute: ExercisesIndexRoute,
+  ListInvertedRoute: ListInvertedRoute,
+  ListRegularRoute: ListRegularRoute,
+  ListIndexRoute: ListIndexRoute,
 }
 
 export const routeTree = rootRoute
@@ -195,8 +217,9 @@ export const routeTree = rootRoute
         "/inverted",
         "/log-in",
         "/sign-in",
-        "/exercises/inverted",
-        "/exercises/"
+        "/list/inverted",
+        "/list/regular",
+        "/list/"
       ]
     },
     "/": {
@@ -211,11 +234,14 @@ export const routeTree = rootRoute
     "/sign-in": {
       "filePath": "sign-in.tsx"
     },
-    "/exercises/inverted": {
-      "filePath": "exercises/inverted.tsx"
+    "/list/inverted": {
+      "filePath": "list/inverted.tsx"
     },
-    "/exercises/": {
-      "filePath": "exercises/index.tsx"
+    "/list/regular": {
+      "filePath": "list/regular.tsx"
+    },
+    "/list/": {
+      "filePath": "list/index.tsx"
     }
   }
 }

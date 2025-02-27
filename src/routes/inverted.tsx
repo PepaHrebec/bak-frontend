@@ -1,9 +1,13 @@
 import { useQuery } from "@tanstack/react-query";
 import { createFileRoute } from "@tanstack/react-router";
 import { useLocalStorage } from "usehooks-ts";
-import { handleExpiredCookie, load } from "../utils/functions";
+import {
+  handleExpiredCookie,
+  loadTranscription,
+  saveWord,
+} from "../utils/functions";
 import { UserProfile } from "../utils/types";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { RotaryCard } from "../components/card/RotaryCard";
 import { Button } from "../components/buttons/Button";
 import { Send, BookmarkPlus } from "lucide-react";
@@ -20,15 +24,19 @@ function RouteComponent() {
     undefined
   );
 
+  // States
+  const [isSaved, setIsSaved] = useState(false);
+
   // Data loading
   const { isPending, error, data, isFetching, refetch } = useQuery({
     queryKey: ["repoData"],
-    queryFn: () => load(),
+    queryFn: () => loadTranscription(),
   });
 
   // UseEffects
   useEffect(() => {
     handleExpiredCookie(data, setValue, userData);
+    setIsSaved(false);
   }, [data]);
 
   if (error) return "An error has occurred: " + error.message;
@@ -50,7 +58,20 @@ function RouteComponent() {
           New Word
         </Button>
         {userData ? (
-          <Button LucideIcon={BookmarkPlus}>Save To List</Button>
+          <Button
+            disabled={data?.wordIsInList || isSaved}
+            LucideIcon={BookmarkPlus}
+            onClick={
+              isPending || isFetching
+                ? () => null
+                : () => {
+                    saveWord(data?.originalWord, data?.transcriptions[0]);
+                    setIsSaved(true);
+                  }
+            }
+          >
+            Save To List
+          </Button>
         ) : null}
       </div>
     </div>
