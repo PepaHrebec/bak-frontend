@@ -35,7 +35,9 @@ function RootComponent() {
                 </>
               ) : (
                 <div className="flex flex-row gap-4">
-                  <div>{value.name}</div>
+                  <div className="flex flex-row justify-center items-center">
+                    {value.name}
+                  </div>
                   <LogOutButton onClick={() => logOut(setValue)}>
                     Log-out
                   </LogOutButton>

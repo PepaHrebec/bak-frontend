@@ -49,7 +49,7 @@ function RouteComponent() {
     setRandomizedDataArray(data?.sort(() => 0.5 - Math.random()));
   }, [data]);
 
-  if ((error as AxiosError).status === 401) {
+  if (error && (error as AxiosError).status === 401) {
     setValue(undefined);
     navigate({
       to: "/",

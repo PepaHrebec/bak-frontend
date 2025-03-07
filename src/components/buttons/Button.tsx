@@ -20,6 +20,7 @@ export const Button = ({
       disabled={disabled}
       className={cn(
         "font-bold text-white bg-green-500 px-3 py-1 rounded-sm hover:rounded-md hover:bg-green-600 active:bg-green-700 shadow-md shadow-green-200 transition-all duration-200 hover:cursor-pointer flex flex-row items-center gap-2 min-w-[6rem]",
+        LucideIcon ? "" : "flex flex-row justify-center items-center",
         buttonType === "warning"
           ? "bg-amber-400 hover:bg-amber-500 active:bg-amber-600 shadow-md shadow-amber-200"
           : "",
