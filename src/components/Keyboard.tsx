@@ -45,6 +45,8 @@ const vowelArr = [
   "a",
   "ɑ",
   "ː",
+  "ˈ",
+  "ˌ",
 ];
 
 export default memo(function Keyboard({
