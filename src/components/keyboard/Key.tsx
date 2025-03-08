@@ -8,7 +8,7 @@ export interface KeyProps
 
 export function Key({
   value,
-  keyType,
+  keyType = "normal",
   className,
   ...props
 }: Readonly<KeyProps>) {

@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import { createFileRoute } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
-import Keyboard from "../components/keyboard";
 import toast from "react-hot-toast";
 import { cn } from "../utils/cn";
 import {
@@ -15,6 +14,7 @@ import { Send, NotebookPen, Search, BookmarkPlus } from "lucide-react";
 import { Button } from "../components/buttons/Button";
 import { UserWordDisplay } from "../components/UserWordDisplay";
 import { DoubleBorder } from "../components/DoubleBorder";
+import Keyboard from "../components/Keyboard";
 
 export const Route = createFileRoute("/")({
   component: HomeComponent,

@@ -15,7 +15,7 @@ import { UserWordDisplay } from "../../components/UserWordDisplay";
 import { cn } from "../../utils/cn";
 import { loadUserList, deleteFromList } from "../../utils/functions";
 import { UserListRequest, UserProfile } from "../../utils/types";
-import Keyboard from "../../components/keyboard";
+import Keyboard from "../../components/Keyboard";
 import { AxiosError } from "axios";
 import { useLocalStorage } from "usehooks-ts";
 
