@@ -12,7 +12,7 @@ export const Route = createFileRoute("/sign-in")({
   component: RouteComponent,
   beforeLoad: () => {
     const user = localStorage.getItem("user");
-    if (user !== "undefined") {
+    if (user !== null) {
       throw redirect({
         to: "/",
       });
