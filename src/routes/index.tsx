@@ -21,6 +21,8 @@ export const Route = createFileRoute("/")({
 });
 
 function HomeComponent() {
+  console.log(import.meta.env.VITE_BACKEND);
+  console.log("AAAAAA");
   // User data hook
   const [userData, setValue] = useLocalStorage<undefined | UserProfile>(
     "user",
