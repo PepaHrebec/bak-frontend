@@ -21,13 +21,13 @@ export const Route = createFileRoute("/")({
 });
 
 function HomeComponent() {
-  console.log(import.meta.env.VITE_BACKEND);
-  console.log("AAAAAA");
   // User data hook
   const [userData, setValue] = useLocalStorage<undefined | UserProfile>(
     "user",
     undefined
   );
+
+  console.log(userData);
 
   // Data loading
   const { isPending, error, data, isFetching, refetch } = useQuery({
