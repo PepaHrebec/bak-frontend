@@ -45,7 +45,7 @@ function RootComponent() {
             </div>
           </nav>
         </div>
-        <div className="flex-1 m-auto w-[80vw]">
+        <div className="flex-1 m-auto w-[80vw] py-2">
           <Outlet />
         </div>
       </div>

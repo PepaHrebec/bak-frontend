@@ -121,7 +121,7 @@ function HomeComponent() {
 
   return (
     <div className="h-full flex flex-col justify-center">
-      <div className="flex flex-col gap-16">
+      <div className="flex flex-col gap-4 sm:gap-16">
         <div className="flex flex-col gap-4 items-center">
           <div className=" m-auto flex flex-row gap-1 bg-white p-2 rounded-md w-fit text-md text-gray-400">
             {dataIndex + 1}/{randomizedDataArray.length}

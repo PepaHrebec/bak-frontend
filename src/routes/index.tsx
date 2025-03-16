@@ -96,7 +96,7 @@ function HomeComponent() {
 
   return (
     <div className="h-full flex flex-col justify-center">
-      <div className="flex flex-col gap-16">
+      <div className="flex flex-col gap-4 sm:gap-16">
         <div className="flex flex-col gap-4 items-center">
           <DoubleBorder className="min-w-[40vw]">
             {isPending || isFetching ? (
@@ -118,7 +118,7 @@ function HomeComponent() {
           <UserWordDisplay userWord={userWord} />
         </div>
         <div className="flex flex-col items-center gap-4">
-          <div className="grid grid-cols-2 gap-4 sm:grid-cols-4">
+          <div className="grid grid-cols-2 gap-4 sm:grid-cols-4 justify-center sm:flex sm:flex-row sm:justify-between">
             <Button onClick={() => refetch()} LucideIcon={Send}>
               New Word
             </Button>
