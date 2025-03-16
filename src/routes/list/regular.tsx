@@ -33,10 +33,9 @@ export const Route = createFileRoute("/list/regular")({
 
 function HomeComponent() {
   // User data hook
-  const [, setValue] = useLocalStorage<undefined | UserProfile>(
-    "user",
-    undefined
-  );
+  const [userData = undefined, setValue] = useLocalStorage<
+    undefined | UserProfile
+  >("user", undefined);
 
   // Data loading
   const { isPending, error, data, isFetching } = useQuery({
@@ -147,7 +146,7 @@ function HomeComponent() {
           <UserWordDisplay userWord={userWord} />
         </div>
         <div className="flex flex-col items-center gap-4">
-          <div className="flex flex-row gap-4">
+          <div className="grid grid-cols-2 gap-4 sm:grid-cols-4">
             {randomizedDataArray &&
             dataIndex < randomizedDataArray.length - 1 ? (
               <Button
@@ -196,7 +195,7 @@ function HomeComponent() {
                     });
               }}
             >
-              Remove From List
+              Remove
             </Button>
           </div>
           <Keyboard

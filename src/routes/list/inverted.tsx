@@ -24,10 +24,9 @@ export const Route = createFileRoute("/list/inverted")({
 
 function RouteComponent() {
   // User data hook
-  const [, setValue] = useLocalStorage<undefined | UserProfile>(
-    "user",
-    undefined
-  );
+  const [userData = undefined, setValue] = useLocalStorage<
+    undefined | UserProfile
+  >("user", undefined);
 
   // Data loading
   const { isPending, error, data, isFetching } = useQuery({

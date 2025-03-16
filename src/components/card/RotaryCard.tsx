@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { cn } from "../../utils/cn";
 import { CardFace } from "./CardFace";
 
@@ -19,6 +19,10 @@ export const RotaryCard = ({
   // transformation which would've been applied through the hover, making sure that
   // the effects don't overlap in a case of a click AND a hover
   const [rotate, setRotate] = useState(true);
+
+  useEffect(() => {
+    setRotate(true);
+  }, [originalWord]);
 
   return (
     <div

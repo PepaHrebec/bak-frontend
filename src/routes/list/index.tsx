@@ -24,10 +24,9 @@ export const Route = createFileRoute("/list/")({
 
 function RouteComponent() {
   // User data hook
-  const [, setValue] = useLocalStorage<undefined | UserProfile>(
-    "user",
-    undefined
-  );
+  const [userData = undefined, setValue] = useLocalStorage<
+    undefined | UserProfile
+  >("user", undefined);
 
   // Data loading
   const { isPending, error, data, isFetching, refetch } = useQuery({
@@ -100,7 +99,7 @@ function RouteComponent() {
             })}
         </div>
       </div>
-      <div className="flex flex-row gap-4 justify-center">
+      <div className="flex flex-col sm:flex-row gap-4 justify-center">
         <Button
           onClick={() => navigate({ to: "/list/regular" })}
           LucideIcon={Pencil}

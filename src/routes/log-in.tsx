@@ -1,4 +1,4 @@
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { createFileRoute, redirect, useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
 import { fetcher } from "../utils/axios";
@@ -12,7 +12,7 @@ export const Route = createFileRoute("/log-in")({
   component: RouteComponent,
   beforeLoad: () => {
     const user = localStorage.getItem("user");
-    if (user !== "undefined") {
+    if (user !== undefined && user !== "undefined" && user !== null) {
       throw redirect({
         to: "/",
       });
@@ -22,13 +22,15 @@ export const Route = createFileRoute("/log-in")({
 
 function RouteComponent() {
   // Storage hook
-  const [, setValue] = useLocalStorage<undefined | UserProfile>(
-    "user",
-    undefined
-  );
+  const [userData = undefined, setValue] = useLocalStorage<
+    undefined | UserProfile
+  >("user", undefined);
 
   // Navigation hook
   const navigate = useNavigate({ from: "/list" });
+
+  // TanStack Query
+  const queryClient = useQueryClient();
 
   // Mutation
   const mutation = useMutation({
@@ -52,6 +54,8 @@ function RouteComponent() {
         password: user.password,
       });
       const rtrn = await data.data;
+
+      await queryClient.invalidateQueries({ queryKey: ["repoData"] });
 
       setValue({ name: rtrn.name, id: rtrn.id });
 

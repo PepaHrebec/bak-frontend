@@ -13,6 +13,7 @@ const consArr = [
   "d",
   "k",
   "g",
+  "ɡ",
   "m",
   "n",
   "ŋ",
@@ -54,7 +55,7 @@ export default memo(function Keyboard({
   clickDeleteBtn,
 }: KeyboardProps) {
   return (
-    <div>
+    <div className="flex flex-col items-center">
       <div>
         {vowelArr.map((sign) => (
           <Key key={sign} value={sign} onClick={clickLetterBtn} />
@@ -64,8 +65,13 @@ export default memo(function Keyboard({
         {consArr.map((sign) => (
           <Key key={sign} value={sign} onClick={clickLetterBtn} />
         ))}
-        <Key value={"Delete"} keyType="delete" onClick={clickDeleteBtn} />
       </div>
+      <Key
+        value={"Remove"}
+        keyType="delete"
+        onClick={clickDeleteBtn}
+        className="self-end"
+      />
     </div>
   );
 });

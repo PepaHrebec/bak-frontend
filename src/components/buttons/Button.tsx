@@ -19,7 +19,7 @@ export const Button = ({
       {...props}
       disabled={disabled}
       className={cn(
-        "font-bold text-white bg-green-500 px-3 py-1 rounded-sm hover:rounded-md hover:bg-green-600 active:bg-green-700 shadow-md shadow-green-200 transition-all duration-200 hover:cursor-pointer flex flex-row items-center gap-2 min-w-[6rem]",
+        "font-bold text-white bg-green-500 px-3 sm:py-1 rounded-sm hover:rounded-md hover:bg-green-600 active:bg-green-700 shadow-md shadow-green-200 transition-all duration-200 hover:cursor-pointer flex flex-row items-center gap-2 min-w-[6rem] relative",
         LucideIcon ? "" : "flex flex-row justify-center items-center",
         buttonType === "warning"
           ? "bg-amber-400 hover:bg-amber-500 active:bg-amber-600 shadow-md shadow-amber-200"
@@ -38,12 +38,19 @@ export const Button = ({
     >
       {LucideIcon ? (
         <LucideIcon
-          className={cn(disabled ? "text-gray-500" : "")}
+          className={cn("absolute left-2", disabled ? "text-gray-500" : "")}
           strokeWidth={3}
           size={12}
         />
       ) : null}
-      {children}
+      <div
+        className={cn(
+          "flex flex-1 flex-row justify-center items-center",
+          LucideIcon ? "pl-3" : ""
+        )}
+      >
+        {children}
+      </div>
     </button>
   );
 };

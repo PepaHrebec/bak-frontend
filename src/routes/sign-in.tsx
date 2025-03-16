@@ -1,4 +1,4 @@
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { createFileRoute, redirect, useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
 import { fetcher } from "../utils/axios";
@@ -14,7 +14,7 @@ export const Route = createFileRoute("/sign-in")({
     const user = localStorage.getItem("user");
     console.log(user);
     console.log(typeof user);
-    if (user !== "undefined") {
+    if (user !== undefined && user !== "undefined" && user !== null) {
       throw redirect({
         to: "/",
       });
@@ -24,13 +24,16 @@ export const Route = createFileRoute("/sign-in")({
 
 function RouteComponent() {
   // Local storage hook
-  const [, setValue] = useLocalStorage<undefined | UserProfile>(
+  const [local, setValue] = useLocalStorage<undefined | UserProfile>(
     "user",
     undefined
   );
 
   // Navigation hook
   const navigate = useNavigate({ from: "/list" });
+
+  // TanStack Query
+  const queryClient = useQueryClient();
 
   // Mutation hook
   const mutation = useMutation({
@@ -48,6 +51,12 @@ function RouteComponent() {
 
   // Functions
   async function signIn(user: UserAuthValues) {
+    if (name.length < 5) {
+      return toast.error("Name should be at least 5 characters long.");
+    }
+    if (password.length < 8) {
+      return toast.error("Password should be at least 8 characters long.");
+    }
     try {
       const data = await mutation.mutateAsync({
         name: user.name,
@@ -55,7 +64,11 @@ function RouteComponent() {
       });
       const rtrn = await data.data;
 
-      setValue(rtrn);
+      await queryClient.invalidateQueries({ queryKey: ["repoData"] });
+
+      setValue({ name: rtrn.name, id: rtrn.id });
+      console.log(rtrn);
+      console.log(local);
 
       navigate({ to: "/" });
     } catch (error) {

@@ -22,10 +22,9 @@ export const Route = createFileRoute("/")({
 
 function HomeComponent() {
   // User data hook
-  const [userData, setValue] = useLocalStorage<undefined | UserProfile>(
-    "user",
-    undefined
-  );
+  const [userData = undefined, setValue] = useLocalStorage<
+    undefined | UserProfile
+  >("user", undefined);
 
   console.log(userData);
 
@@ -33,6 +32,7 @@ function HomeComponent() {
   const { isPending, error, data, isFetching, refetch } = useQuery({
     queryKey: ["repoData"],
     queryFn: () => loadTranscription(),
+    gcTime: 0,
   });
 
   // State hooks
@@ -47,6 +47,7 @@ function HomeComponent() {
     setRevealedTranscription(false);
     handleExpiredCookie(data, setValue, userData);
     setHasShownSolution(false);
+    setIsSaved(data ? data.wordIsInList : false);
   }, [data]);
 
   useEffect(() => {
@@ -117,7 +118,7 @@ function HomeComponent() {
           <UserWordDisplay userWord={userWord} />
         </div>
         <div className="flex flex-col items-center gap-4">
-          <div className="flex flex-row gap-4">
+          <div className="grid grid-cols-2 gap-4 sm:grid-cols-4">
             <Button onClick={() => refetch()} LucideIcon={Send}>
               New Word
             </Button>

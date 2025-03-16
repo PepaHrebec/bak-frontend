@@ -19,10 +19,9 @@ export const Route = createFileRoute("/inverted")({
 
 function RouteComponent() {
   // User data hook
-  const [userData, setValue] = useLocalStorage<undefined | UserProfile>(
-    "user",
-    undefined
-  );
+  const [userData = undefined, setValue] = useLocalStorage<
+    undefined | UserProfile
+  >("user", undefined);
 
   // States
   const [isSaved, setIsSaved] = useState(false);
