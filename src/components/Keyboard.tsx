@@ -65,13 +65,13 @@ export default memo(function Keyboard({
         {consArr.map((sign) => (
           <Key key={sign} value={sign} onClick={clickLetterBtn} />
         ))}
+        <Key
+          value={"Remove"}
+          keyType="delete"
+          onClick={clickDeleteBtn}
+          className="self-end"
+        />
       </div>
-      <Key
-        value={"Remove"}
-        keyType="delete"
-        onClick={clickDeleteBtn}
-        className="self-end"
-      />
     </div>
   );
 });
