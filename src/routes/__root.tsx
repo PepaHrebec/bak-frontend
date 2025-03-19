@@ -26,16 +26,16 @@ function RootComponent() {
               <NavLink to="/inverted" text="Inverted" />
               {value !== undefined ? <NavLink to="/list" text="List" /> : null}
             </div>
-            <div className="flex flex-row gap-4">
+            <div className="flex flex-row">
               {value === undefined ? (
                 <>
                   <NavLink to="/sign-in" text="Sign-in" />
                   <NavLink to="/log-in" text="Log-in" />
                 </>
               ) : (
-                <div className="flex flex-row gap-4">
-                  <div className="flex flex-row justify-center items-center">
-                    {value.name}
+                <div className="flex flex-row">
+                  <div className="flex flex-row justify-center items-center px-3 py-1 md:px-5 md:py-3 max-w-[20vw] overflow-auto">
+                    <p>{value.name}</p>
                   </div>
                   <LogOutButton onClick={() => logOut(setValue)}>
                     Log-out
@@ -49,7 +49,11 @@ function RootComponent() {
           <Outlet />
         </div>
       </div>
-      <Toaster />
+      <Toaster
+        toastOptions={{
+          duration: 4000,
+        }}
+      />
     </div>
   );
 }

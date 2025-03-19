@@ -79,7 +79,7 @@ function HomeComponent() {
       transcriptions?.filter((tr) => tr.replace("ˈ", "") === userWord)
         ?.length !== 0
     ) {
-      toast("Almost there!");
+      toast.success("Just missing the stress!");
     } else {
       toast.error("You've made an error.");
     }

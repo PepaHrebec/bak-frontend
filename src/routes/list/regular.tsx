@@ -90,7 +90,7 @@ function HomeComponent() {
     } else if (
       randomizedDataArray[dataIndex].transcription.replace("ˈ", "") === userWord
     ) {
-      toast("Almost there!");
+      toast.success("Just missing the stress!");
     } else {
       toast.error("You've made an error.");
     }

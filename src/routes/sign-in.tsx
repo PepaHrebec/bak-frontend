@@ -12,8 +12,6 @@ export const Route = createFileRoute("/sign-in")({
   component: RouteComponent,
   beforeLoad: () => {
     const user = localStorage.getItem("user");
-    console.log(user);
-    console.log(typeof user);
     if (user !== undefined && user !== "undefined" && user !== null) {
       throw redirect({
         to: "/",
@@ -24,7 +22,7 @@ export const Route = createFileRoute("/sign-in")({
 
 function RouteComponent() {
   // Local storage hook
-  const [local, setValue] = useLocalStorage<undefined | UserProfile>(
+  const [_, setValue] = useLocalStorage<undefined | UserProfile>(
     "user",
     undefined
   );
@@ -48,6 +46,7 @@ function RouteComponent() {
   // States
   const [name, setName] = useState("");
   const [password, setPassword] = useState("");
+  const [secondPassword, setSecondPassword] = useState("");
 
   // Functions
   async function signIn(user: UserAuthValues) {
@@ -56,6 +55,9 @@ function RouteComponent() {
     }
     if (password.length < 8) {
       return toast.error("Password should be at least 8 characters long.");
+    }
+    if (password !== secondPassword) {
+      return toast.error("Passwords have to match.");
     }
     try {
       const data = await mutation.mutateAsync({
@@ -67,8 +69,6 @@ function RouteComponent() {
       await queryClient.invalidateQueries({ queryKey: ["repoData"] });
 
       setValue({ name: rtrn.name, id: rtrn.id });
-      console.log(rtrn);
-      console.log(local);
 
       navigate({ to: "/" });
     } catch (error) {
@@ -81,25 +81,43 @@ function RouteComponent() {
   return (
     <div className="items-center h-full flex flex-col justify-center">
       <div className="bg-white sm:w-[40vw] shadow-md rounded px-8 pt-6 pb-8 mb-4">
-        <div className="mb-4">
-          <p className="block text-gray-700 text-sm font-bold mb-2">Username</p>
-          <input
-            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-            type="text"
-            placeholder="Username"
-          />
-        </div>
-        <div className="mb-6">
-          <p className="block text-gray-700 text-sm font-bold mb-2">Password</p>
-          <input
-            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            type="password"
-            placeholder="******************"
-          />
+        <div className="flex flex-col gap-4">
+          <div>
+            <p className="block text-gray-700 text-sm font-bold mb-2">
+              Username
+            </p>
+            <input
+              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              type="text"
+              placeholder="Username"
+            />
+          </div>
+          <div>
+            <p className="block text-gray-700 text-sm font-bold mb-2">
+              Password
+            </p>
+            <input
+              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              type="password"
+              placeholder="******************"
+            />
+          </div>
+          <div>
+            <p className="block text-gray-700 text-sm font-bold mb-2">
+              Password Validation
+            </p>
+            <input
+              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"
+              value={secondPassword}
+              onChange={(e) => setSecondPassword(e.target.value)}
+              type="password"
+              placeholder="******************"
+            />
+          </div>
         </div>
         <div className="flex items-center justify-between">
           <Button

@@ -2,7 +2,7 @@ import { createFileRoute, redirect, useNavigate } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { loadUserList } from "../../utils/functions";
 import { RotaryCard } from "../../components/card/RotaryCard";
-import { useState } from "react";
+import { startTransition, useOptimistic, useState } from "react";
 import { Button } from "../../components/buttons/Button";
 import { Club, Pencil, Trash2 } from "lucide-react";
 import { fetcher } from "../../utils/axios";
@@ -38,10 +38,20 @@ function RouteComponent() {
   const navigate = useNavigate({ from: "/list" });
 
   // State hooks
-  const [searchText, setSearchText] = useState("");
+  const [optimisticState, removeOptimistic] = useOptimistic(
+    data,
+    // updateFn
+    (currentState, optimisticValue: number) => {
+      return currentState?.filter((val) => val.id !== optimisticValue);
+    }
+  );
 
   // Functions
   const deleteItem = async (itemId: string) => {
+    startTransition(() => {
+      removeOptimistic(Number(itemId));
+    });
+
     try {
       await fetcher.delete(`/repeat-list/${itemId}`);
       await refetch();
@@ -56,58 +66,56 @@ function RouteComponent() {
     }
   };
 
-  if (error || isPending || isFetching) {
-    return <div>Wait</div>;
+  if (error || isPending || isFetching || !optimisticState) {
+    return <div>Loading...</div>;
   }
 
   return (
     <div>
-      <input
-        type="text"
-        value={searchText}
-        onChange={(e) => setSearchText(e.target.value)}
-      />
       <div className="max-h-[70vh] h-[70vh] overflow-auto">
+        {data.length === 0 ? (
+          <div className="max-w-[75vw] h-[70vh] flex justify-center items-center">
+            <p className="text-2xl text-gray-400">Space for your list!</p>
+          </div>
+        ) : null}
         <div className="grid grid-cols-2 sm:grid-cols-4 justify-items-center m-auto gap-1 max-w-[75vw]">
-          {data
-            .filter((req) =>
-              searchText !== "" ? req.word.includes(searchText) : true
-            )
-            .map((req) => {
-              return (
-                <div
+          {optimisticState.map((req) => {
+            return (
+              <div
+                key={req.id}
+                className="w-full h-20 p-2 rounded-sm bg-gray-200 flex flex-col gap-2 items-center"
+              >
+                <RotaryCard
                   key={req.id}
-                  className="w-full h-20 p-2 rounded-sm bg-gray-200 flex flex-col gap-2 items-center"
+                  transcriptionIsFront={false}
+                  originalWord={req.word}
+                  transcribedWords={[req.transcription]}
+                  className="w-full h-8"
+                />
+                <Button
+                  buttonType="reject"
+                  className="scale-75"
+                  LucideIcon={Trash2}
+                  onClick={() => deleteItem(String(req.id))}
                 >
-                  <RotaryCard
-                    key={req.id}
-                    transcriptionIsFront={false}
-                    originalWord={req.word}
-                    transcribedWords={[req.transcription]}
-                    className="w-full h-8"
-                  />
-                  <Button
-                    buttonType="reject"
-                    className="scale-75"
-                    LucideIcon={Trash2}
-                    onClick={() => deleteItem(String(req.id))}
-                  >
-                    Remove
-                  </Button>
-                </div>
-              );
-            })}
+                  Remove
+                </Button>
+              </div>
+            );
+          })}
         </div>
       </div>
       <div className="flex flex-col sm:flex-row gap-4 justify-center">
         <Button
           onClick={() => navigate({ to: "/list/regular" })}
+          disabled={data.length === 0}
           LucideIcon={Pencil}
         >
           Regular Exercise
         </Button>
         <Button
           onClick={() => navigate({ to: "/list/inverted" })}
+          disabled={data.length === 0}
           LucideIcon={Club}
         >
           Flashcard Exercise
