@@ -1,14 +1,14 @@
 import { createFileRoute, redirect, useNavigate } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { loadUserList } from "../../utils/functions";
-import { RotaryCard } from "../../components/card/RotaryCard";
-import { startTransition, useOptimistic, useState } from "react";
+import { startTransition, useEffect, useOptimistic, useState } from "react";
 import { Button } from "../../components/buttons/Button";
-import { Club, Pencil, Trash2 } from "lucide-react";
+import { Club, Pencil } from "lucide-react";
 import { fetcher } from "../../utils/axios";
 import toast from "react-hot-toast";
 import { UserProfile } from "../../utils/types";
 import { useLocalStorage } from "usehooks-ts";
+import { ListTranscriptionWrapper } from "../../components/ListTranscriptionWrapper";
 
 export const Route = createFileRoute("/list/")({
   component: RouteComponent,
@@ -45,6 +45,7 @@ function RouteComponent() {
       return currentState?.filter((val) => val.id !== optimisticValue);
     }
   );
+  const [newWord, setNewWord] = useState("");
 
   // Functions
   const deleteItem = async (itemId: string) => {
@@ -66,12 +67,30 @@ function RouteComponent() {
     }
   };
 
+  const addItem = async () => {
+    try {
+      await fetcher.post(`/repeat-list/own-word`, {
+        word: newWord,
+      });
+      await refetch();
+      setNewWord("");
+    } catch (error: any) {
+      toast.error(error.response.data.message);
+      if (error.response.status === 401) {
+        setValue(undefined);
+        redirect({
+          to: "/",
+        });
+      }
+    }
+  };
+
   if (error || isPending || isFetching || !optimisticState) {
     return <div>Loading...</div>;
   }
 
   return (
-    <div>
+    <div className="flex flex-col gap-3">
       <div className="max-h-[70vh] h-[70vh] overflow-auto">
         {data.length === 0 ? (
           <div className="max-w-[75vw] h-[70vh] flex justify-center items-center">
@@ -81,26 +100,13 @@ function RouteComponent() {
         <div className="grid grid-cols-2 sm:grid-cols-4 justify-items-center m-auto gap-1 max-w-[75vw]">
           {optimisticState.map((req) => {
             return (
-              <div
+              <ListTranscriptionWrapper
                 key={req.id}
-                className="w-full h-20 p-2 rounded-sm bg-gray-200 flex flex-col gap-2 items-center"
-              >
-                <RotaryCard
-                  key={req.id}
-                  transcriptionIsFront={false}
-                  originalWord={req.word}
-                  transcribedWords={[req.transcription]}
-                  className="w-full h-8"
-                />
-                <Button
-                  buttonType="reject"
-                  className="scale-75"
-                  LucideIcon={Trash2}
-                  onClick={() => deleteItem(String(req.id))}
-                >
-                  Remove
-                </Button>
-              </div>
+                listId={req.id}
+                deleteItem={deleteItem}
+                originalWord={req.word}
+                transcribedWords={req.transcriptions}
+              />
             );
           })}
         </div>
@@ -120,6 +126,14 @@ function RouteComponent() {
         >
           Flashcard Exercise
         </Button>
+      </div>
+      <div className="flex flex-row justify-center gap-4">
+        <input
+          type="text"
+          value={newWord}
+          onChange={(e) => setNewWord(e.target.value)}
+        />
+        <Button onClick={addItem}>Add</Button>
       </div>
     </div>
   );

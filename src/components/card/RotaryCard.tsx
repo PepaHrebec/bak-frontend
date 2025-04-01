@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { cn } from "../../utils/cn";
 import { CardFace } from "./CardFace";
 
-interface RotaryCardProps extends React.HTMLAttributes<HTMLDivElement> {
+export interface RotaryCardProps extends React.HTMLAttributes<HTMLDivElement> {
   originalWord: string | undefined;
   transcribedWords: string[] | undefined;
   transcriptionIsFront?: boolean;

@@ -17,7 +17,7 @@ export interface TranscriptionRequest extends BasicRequest {
 export interface UserListRequest extends BasicRequest {
   id: number;
   word: string;
-  transcription: string;
+  transcriptions: string[];
 }
 
 export interface UserAuthValues {

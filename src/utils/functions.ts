@@ -21,8 +21,6 @@ export function handleExpiredCookie(
   user: UserProfile | undefined
 ) {
   if (data && !data.loggedIn && user) {
-    console.log("HIT");
-    console.log(data, data.loggedIn, user);
     setValue(undefined);
   }
 }
@@ -41,11 +39,11 @@ export async function loadUserList() {
 }
 
 // Saves the word into the user's list
-export async function saveWord(originalWord: string, transcription: string) {
+export async function saveWord(originalWord: string, transcriptions: string[]) {
   try {
     await fetcher.post("/repeat-list", {
       word: originalWord,
-      transcription: transcription,
+      transcriptions: transcriptions,
     });
     toast.success("Word saved successfully!");
   } catch (error: any) {

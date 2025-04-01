@@ -10,11 +10,19 @@ import {
 } from "../utils/functions";
 import { useLocalStorage } from "usehooks-ts";
 import { UserProfile } from "../utils/types";
-import { Send, NotebookPen, Search, BookmarkPlus } from "lucide-react";
+import {
+  Send,
+  NotebookPen,
+  Search,
+  BookmarkPlus,
+  ArrowLeftRight,
+  Info,
+} from "lucide-react";
 import { Button } from "../components/buttons/Button";
 import { UserWordDisplay } from "../components/UserWordDisplay";
 import { DoubleBorder } from "../components/DoubleBorder";
 import Keyboard from "../components/Keyboard";
+import { InfoToggle } from "../components/InfoToggle";
 
 export const Route = createFileRoute("/")({
   component: HomeComponent,
@@ -26,8 +34,6 @@ function HomeComponent() {
     undefined | UserProfile
   >("user", undefined);
 
-  console.log(userData);
-
   // Data loading
   const { isPending, error, data, isFetching, refetch } = useQuery({
     queryKey: ["repoData"],
@@ -37,6 +43,7 @@ function HomeComponent() {
 
   // State hooks
   const [userWord, setUserWord] = useState("");
+  const [transcriptionIndex, setTranscriptionIndex] = useState(0);
   const [revealedTranscription, setRevealedTranscription] = useState(false);
   const [hasShownSolution, setHasShownSolution] = useState(false);
   const [isSaved, setIsSaved] = useState(false);
@@ -48,11 +55,8 @@ function HomeComponent() {
     handleExpiredCookie(data, setValue, userData);
     setHasShownSolution(false);
     setIsSaved(data ? data.wordIsInList : false);
+    setTranscriptionIndex(0);
   }, [data]);
-
-  useEffect(() => {
-    console.log(userData);
-  }, [userData]);
 
   // Consts
   const transcriptions = data?.transcriptions;
@@ -74,8 +78,9 @@ function HomeComponent() {
     // If there's at least one exact match
     if (transcriptions?.filter((tr) => tr === userWord)?.length !== 0) {
       toast.success("Good job!");
-      // If there's at least one match without stress
-    } else if (
+    }
+    // If there's at least one match without stress
+    else if (
       transcriptions?.filter((tr) => tr.replace("ˈ", "") === userWord)
         ?.length !== 0
     ) {
@@ -95,8 +100,9 @@ function HomeComponent() {
   if (error) return "An error has occurred: " + error.message;
 
   return (
-    <div className="h-full flex flex-col justify-center">
+    <div className="h-full flex flex-col justify-center relative">
       <div className="flex flex-col gap-4 sm:gap-16">
+        <InfoToggle />
         <div className="flex flex-col gap-4 items-center">
           <DoubleBorder className="min-w-[40vw]">
             {isPending || isFetching ? (
@@ -104,14 +110,16 @@ function HomeComponent() {
             ) : (
               <>
                 <p>{data.originalWord.toLocaleUpperCase()}</p>
-                <p
-                  className={cn(
-                    "transition duration-500",
-                    revealedTranscription ? "blur-none" : "blur"
-                  )}
-                >
-                  {data.transcriptions[0]}
-                </p>
+                <div className="flex flex-row gap-8">
+                  <p
+                    className={cn(
+                      "transition duration-500 flex",
+                      revealedTranscription ? "blur-none" : "blur"
+                    )}
+                  >
+                    {data.transcriptions[transcriptionIndex]}
+                  </p>
+                </div>
               </>
             )}
           </DoubleBorder>
@@ -137,15 +145,35 @@ function HomeComponent() {
             >
               {revealedTranscription ? "Hide" : "Show"}
             </Button>
+            <Button
+              buttonType="info"
+              LucideIcon={ArrowLeftRight}
+              disabled={
+                !revealedTranscription ||
+                !data ||
+                data.transcriptions.length === 1
+              }
+              className="cursor-pointer rounded min-w-0 max-w-fit"
+              onClick={() =>
+                data
+                  ? setTranscriptionIndex(
+                      (prev) => (prev + 1) % data.transcriptions.length
+                    )
+                  : null
+              }
+            >
+              Transcription+
+            </Button>
             {userData ? (
               <Button
+                className="col-span-2 sm:col-span-1"
                 LucideIcon={BookmarkPlus}
                 disabled={data?.wordIsInList || isSaved}
                 onClick={
                   isPending || isFetching
                     ? () => null
                     : () => {
-                        saveWord(data?.originalWord, data?.transcriptions[0]);
+                        saveWord(data?.originalWord, data?.transcriptions);
                         setIsSaved(true);
                       }
                 }

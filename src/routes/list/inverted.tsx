@@ -70,7 +70,7 @@ function RouteComponent() {
         <RotaryCard
           originalWord={isFetching || isPending ? undefined : currentItem.word}
           transcribedWords={
-            isFetching || isPending ? undefined : [currentItem.transcription]
+            isFetching || isPending ? undefined : currentItem.transcriptions
           }
         />
       </DoubleBorder>

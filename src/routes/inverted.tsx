@@ -64,7 +64,7 @@ function RouteComponent() {
               isPending || isFetching
                 ? () => null
                 : () => {
-                    saveWord(data?.originalWord, data?.transcriptions[0]);
+                    saveWord(data?.originalWord, data?.transcriptions);
                     setIsSaved(true);
                   }
             }
