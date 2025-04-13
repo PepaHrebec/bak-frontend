@@ -41,6 +41,7 @@ export const ListTranscriptionWrapper = (
         </Button>
         <Button
           buttonType="info"
+          title="Swap Transcriptions"
           disabled={transcribedWords.length === 1}
           className="scale-75 min-w-0 max-w-fit"
           onClick={() =>

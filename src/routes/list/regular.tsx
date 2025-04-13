@@ -6,6 +6,7 @@ import {
   ArrowBigRight,
   House,
   Trash2,
+  ArrowLeftRight,
 } from "lucide-react";
 import { useState, useEffect } from "react";
 import toast from "react-hot-toast";
@@ -50,6 +51,7 @@ function HomeComponent() {
   const [userWord, setUserWord] = useState("");
   const [revealedTranscription, setRevealedTranscription] = useState(false);
   const [hasShownSolution, setHasShownSolution] = useState(false);
+  const [transcriptionIndex, setTranscriptionIndex] = useState(0);
   const [randomizedDataArray, setRandomizedDataArray] = useState<
     UserListRequest[] | undefined
   >(undefined);
@@ -64,10 +66,14 @@ function HomeComponent() {
     setUserWord("");
     setRevealedTranscription(false);
     setHasShownSolution(false);
+    setTranscriptionIndex(0);
   }, [dataIndex]);
 
   // Functions
   function letterClicked(e: React.MouseEvent<Element, MouseEvent>) {
+    if (userWord.length >= 75) {
+      return;
+    }
     const letter = (e.target as HTMLElement).innerText;
     setUserWord((prev) => prev + letter);
   }
@@ -84,11 +90,18 @@ function HomeComponent() {
       return;
     }
     // If there's at least one exact match
-    if (randomizedDataArray[dataIndex].transcription === userWord) {
+    if (
+      randomizedDataArray[dataIndex].transcriptions?.filter(
+        (tr) => tr === userWord
+      )?.length !== 0
+    ) {
       toast.success("Good job!");
-      // If there's at least one match without stress
-    } else if (
-      randomizedDataArray[dataIndex].transcription.replace("ˈ", "") === userWord
+    }
+    // If there's at least one match without stress
+    else if (
+      randomizedDataArray[dataIndex].transcriptions?.filter(
+        (tr) => tr.replace("ˈ", "") === userWord
+      )?.length !== 0
     ) {
       toast.success("Just missing the stress!");
     } else {
@@ -138,7 +151,7 @@ function HomeComponent() {
                     revealedTranscription ? "blur-none" : "blur"
                   )}
                 >
-                  {currentItem.transcription}
+                  {currentItem.transcriptions[transcriptionIndex]}
                 </p>
               </>
             )}
@@ -196,6 +209,26 @@ function HomeComponent() {
               }}
             >
               Remove
+            </Button>
+            <Button
+              buttonType="info"
+              LucideIcon={ArrowLeftRight}
+              disabled={
+                !revealedTranscription ||
+                randomizedDataArray[dataIndex].transcriptions.length === 1
+              }
+              className="cursor-pointer rounded min-w-0 max-w-fit"
+              onClick={() =>
+                data
+                  ? setTranscriptionIndex(
+                      (prev) =>
+                        (prev + 1) %
+                        randomizedDataArray[dataIndex].transcriptions.length
+                    )
+                  : null
+              }
+            >
+              Transcription+
             </Button>
           </div>
           <Keyboard

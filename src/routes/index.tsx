@@ -16,7 +16,6 @@ import {
   Search,
   BookmarkPlus,
   ArrowLeftRight,
-  Info,
 } from "lucide-react";
 import { Button } from "../components/buttons/Button";
 import { UserWordDisplay } from "../components/UserWordDisplay";
@@ -63,6 +62,9 @@ function HomeComponent() {
 
   // Functions
   function letterClicked(e: React.MouseEvent<Element, MouseEvent>) {
+    if (userWord.length >= 70) {
+      return;
+    }
     const letter = (e.target as HTMLElement).innerText;
     setUserWord((prev) => prev + letter);
   }

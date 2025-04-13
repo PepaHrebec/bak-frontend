@@ -1,7 +1,7 @@
 import { createFileRoute, redirect, useNavigate } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { loadUserList } from "../../utils/functions";
-import { startTransition, useEffect, useOptimistic, useState } from "react";
+import { startTransition, useOptimistic, useState } from "react";
 import { Button } from "../../components/buttons/Button";
 import { Club, Pencil } from "lucide-react";
 import { fetcher } from "../../utils/axios";
@@ -46,6 +46,7 @@ function RouteComponent() {
     }
   );
   const [newWord, setNewWord] = useState("");
+  const [isAdding, setIsAdding] = useState(false);
 
   // Functions
   const deleteItem = async (itemId: string) => {
@@ -68,9 +69,14 @@ function RouteComponent() {
   };
 
   const addItem = async () => {
+    const editedWord = newWord.trim().toLowerCase().replaceAll(/[^\w]/g, "");
+    if (data?.filter((val) => val.word === editedWord).length !== 0) {
+      return toast.error("This word is already in your list.");
+    }
+    setIsAdding(true);
     try {
       await fetcher.post(`/repeat-list/own-word`, {
-        word: newWord,
+        word: editedWord,
       });
       await refetch();
       setNewWord("");
@@ -83,6 +89,8 @@ function RouteComponent() {
         });
       }
     }
+    setNewWord("");
+    setIsAdding(false);
   };
 
   if (error || isPending || isFetching || !optimisticState) {
@@ -129,11 +137,15 @@ function RouteComponent() {
       </div>
       <div className="flex flex-row justify-center gap-4">
         <input
+          className="bg-white rounded p-1.5 shadow"
           type="text"
+          placeholder="Your new word..."
           value={newWord}
           onChange={(e) => setNewWord(e.target.value)}
         />
-        <Button onClick={addItem}>Add</Button>
+        <Button disabled={isAdding} onClick={addItem}>
+          Add
+        </Button>
       </div>
     </div>
   );
